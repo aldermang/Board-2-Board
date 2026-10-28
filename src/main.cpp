@@ -49,23 +49,6 @@ void setup() {
   }
   Serial1.setPins(pinRx, pinTx);
   Serial1.begin(9600);
-
-  //Accelerometer setup
-    Serial.begin(115200);
-  while (!Serial)
-    delay(10);
-
-  Serial.println("Adafruit BNO08x test!");
-
-  if (!bno08x.begin_I2C()) {
-    Serial.println("Failed to find BNO08x chip");
-    while (1) {
-      delay(10);
-    }
-  }
-  Serial.println("BNO08x Found!");
-
-  setReports();
 }
 
 //"setReports" function
@@ -127,6 +110,23 @@ void RunSecondBoardLoop() {
 void loop() {
   // \r \n
   if (isMainBoard) {
+
+    //Accelerometer setup
+    Serial.begin(115200);
+    while (!Serial)
+    delay(10);
+
+    Serial.println("Adafruit BNO08x test!");
+
+    if (!bno08x.begin_I2C()) {
+     Serial.println("Failed to find BNO08x chip");
+     while (1) {
+       delay(10);
+     }
+    }
+    Serial.println("BNO08x Found!");
+
+    setReports();
 
     //If the board was reset, print a message
     if (bno08x.wasReset()) {
