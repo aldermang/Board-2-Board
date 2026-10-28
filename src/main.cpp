@@ -38,10 +38,6 @@ int pinTx = 6;
 long rateToPc = 115200;
 long rateToBoard = 9600;
 
-int DoSomeMath(int a) {
-  return a * a;
-}
-
 //Main setup function
 void setup() {
   //Board 2 board setup
