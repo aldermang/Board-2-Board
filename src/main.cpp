@@ -1,3 +1,13 @@
+//////////////////////////////////////////////////////// DISCLAIMER ////////////////////////////////////////////////////////
+/*
+1.) Connect computer to each micro controller (one at a time), force reset the micro controller, and upload the new code
+2.) Once both micro controllers have the new code uploaded, connect both of them to computer (1 via USB and 1 via port) for power
+3.) Connect external power supply to the breadboard (for the motors) and set the voltage to 5-6 [V]
+4.) With everything connected and powered on, the joystick should now control the mechanism
+
+NOTE: For the final testing, the breadboard will be zip-tied upside-down to the bottom of the mechanism housing (for easier access)
+*/
+
 //////////////////////////////////////////////////////// SETUP ////////////////////////////////////////////////////////
 //Libraries
 #include <Arduino.h>
