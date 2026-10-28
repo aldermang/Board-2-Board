@@ -72,6 +72,11 @@ void RunSecondBoardLoop() {
         float alpha = boardbuffer.substring(0,5).toFloat()*100.; //Reads 5 decimal places of first value (alpha)
         float beta = boardbuffer.substring(7).toFloat()*100.; //Skips comma (6) and reads 5 decimal places of second value (beta)
   
+        Serial.print("Second board alpha: ");
+        Serial.println(alpha);
+        Serial.print("Second board beta: ");
+        Serial.println(beta);
+
         //Convert angles to motor volatage outputs
         float fb_Ctrl = sens_FB*alpha*255;
         float rl_Ctrl = sens_RL*beta*255;
