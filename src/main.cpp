@@ -27,7 +27,7 @@ void setReports();
 Adafruit_BNO08x bno08x(BNO08X_RESET);
 sh2_SensorValue_t sensorValue;
 
-bool isMainBoard = false;
+bool isMainBoard = true;
 
 String pcbuffer = "";
 String boardbuffer = "";
@@ -117,9 +117,9 @@ void loop() {
   if (isMainBoard) {
 
     //Accelerometer setup
-    Serial.begin(115200);
-    while (!Serial)
-    delay(10);
+    //Serial.begin(115200);
+    //while (!Serial)
+    //delay(10);
 
     Serial.println("Adafruit BNO08x test!");
 
