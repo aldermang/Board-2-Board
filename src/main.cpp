@@ -27,7 +27,7 @@ void setReports();
 Adafruit_BNO08x bno08x(BNO08X_RESET);
 sh2_SensorValue_t sensorValue;
 
-bool isMainBoard = true;
+bool isMainBoard = false;
 
 String pcbuffer = "";
 String boardbuffer = "";
@@ -41,7 +41,7 @@ long rateToBoard = 9600;
 //Main setup function
 void setup() {
   //Board 2 board setup
-  if (isMainBoard) {
+  if (true) { //isMainBoard
     Serial.begin(rateToPc);
     while (!Serial) {
       ;
