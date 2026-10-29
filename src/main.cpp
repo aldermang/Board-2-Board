@@ -61,6 +61,51 @@ void setReports(void) {
   }
 }
 
+//Main board function
+void RunMainBoardLoop() {
+  //Accelerometer setup
+  //Serial.begin(115200);
+  //while (!Serial)
+  //delay(10);
+
+  Serial.println("Adafruit BNO08x test!");
+
+  if (!bno08x.begin_I2C()) {
+   Serial.println("Failed to find BNO08x chip");
+   while (1) {
+     delay(10);
+   }
+  }
+
+  Serial.println("BNO08x Found!");
+
+  setReports();
+
+  //If the board was reset, print a message
+  if (bno08x.wasReset()) {
+    Serial.print("sensor was reset ");
+    setReports();
+  }
+
+  //If the board was NOT reset (it shouldn't have been), then run the main code
+  if (bno08x.getSensorEvent(&sensorValue)) {
+      //Read accelerometer raw data
+      float x = sensorValue.un.accelerometer.x;
+      float y = sensorValue.un.accelerometer.y;
+      float z = sensorValue.un.accelerometer.z;
+
+      //Convert accelerometer data to angles
+      float alpha = atan2(z, sqrt(x*x + y*y));
+      float beta = atan2(y, sqrt(x*x + z*z));
+
+      //Print angle values into single line to feed into second board 
+      Serial.print(alpha/100.,5); //Divide by 100 to convert values into decimals < 1; 5 indicates # of decimal places
+      Serial.print(",");
+      Serial.println(beta/100.,5); //Divide by 100 to convert values into decimals < 1; 5 indicates # of decimal places
+    }
+
+}
+
 //Second board function
 void RunSecondBoardLoop() {
   while (Serial1.available()) {
@@ -115,47 +160,7 @@ void RunSecondBoardLoop() {
 void loop() {
   // \r \n
   if (isMainBoard) {
-
-    //Accelerometer setup
-    //Serial.begin(115200);
-    //while (!Serial)
-    //delay(10);
-
-    Serial.println("Adafruit BNO08x test!");
-
-    if (!bno08x.begin_I2C()) {
-     Serial.println("Failed to find BNO08x chip");
-     while (1) {
-       delay(10);
-     }
-    }
-    Serial.println("BNO08x Found!");
-
-    setReports();
-
-    //If the board was reset, print a message
-    if (bno08x.wasReset()) {
-        Serial.print("sensor was reset ");
-        setReports();
-    }
-
-    //If the board was NOT reset (it shouldn't have been), then run the main code
-    if (bno08x.getSensorEvent(&sensorValue)) {
-        //Read accelerometer raw data
-        float x = sensorValue.un.accelerometer.x;
-        float y = sensorValue.un.accelerometer.y;
-        float z = sensorValue.un.accelerometer.z;
-
-        //Convert accelerometer data to angles
-        float alpha = atan2(z, sqrt(x*x + y*y));
-        float beta = atan2(y, sqrt(x*x + z*z));
-
-        //Print angle values into single line to feed into second board 
-        Serial.print(alpha/100.,5); //Divide by 100 to convert values into decimals < 1; 5 indicates # of decimal places
-        Serial.print(",");
-        Serial.println(beta/100.,5); //Divide by 100 to convert values into decimals < 1; 5 indicates # of decimal places
-    }
-    
+    RunMainBoardLoop();
   } else {
     RunSecondBoardLoop();
   }
