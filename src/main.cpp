@@ -15,8 +15,8 @@ NOTE: For the final testing, the breadboard will be zip-tied upside-down to the 
 #include <Adafruit_BNO08x.h>
 
 //Set sensitivity values for rotation input to voltage output conversion
-int sens_FB = 2.25;
-int sens_RL = 2.5;
+//int sens_FB = 2.25;
+//int sens_RL = 2.5;
 
 //Define misc values
 void setReports();
@@ -133,7 +133,6 @@ void RunSecondBoardLoop() {
 
           //Serial.print("Second Board Alpha = ");
           //Serial.println(alpha);
-
           //Serial.print("Second Board Beta = ");
           //Serial.println(beta);
         
@@ -141,10 +140,10 @@ void RunSecondBoardLoop() {
           float fb_Ctrl = 4.*alpha;
           float rl_Ctrl = 4.*beta;
 
-          Serial.print("F/B Ctrl: ");
-          Serial.println(fb_Ctrl);
-          Serial.print("R/L Ctrl: ");
-          Serial.println(rl_Ctrl);
+          //Serial.print("F/B Ctrl: ");
+          //Serial.println(fb_Ctrl);
+          //Serial.print("R/L Ctrl: ");
+          //Serial.println(rl_Ctrl);
 
 
           //Define motor voltage outputs for forward/backwards motion and define boundary conditions
