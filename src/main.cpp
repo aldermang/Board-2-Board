@@ -27,7 +27,9 @@ void setReports();
 Adafruit_BNO08x bno08x(BNO08X_RESET);
 sh2_SensorValue_t sensorValue;
 
-bool isMainBoard = true;
+//Set the corresponding statement to true/false based on which board you are uploading to
+//bool isMainBoard = true;
+bool isMainBoard = false;
 
 String pcbuffer = "";
 String boardbuffer = "";
@@ -50,8 +52,8 @@ void setup() {
   Serial1.setPins(pinRx, pinTx);
   Serial1.begin(9600);
 
-  //Accelerometer setup
-  Serial.begin(115200);
+  //Accelerometer setup (comment this out if you are uploading to the secondary board)
+  /*Serial.begin(115200);
   while (!Serial)
   delay(10);
 
@@ -67,6 +69,7 @@ void setup() {
   Serial.println("BNO08x Found!");
 
   setReports();
+  */
 }
 
 //"setReports" function
