@@ -105,6 +105,11 @@ void RunMainBoardLoop() {
       Serial.print(alpha/100.,5); //Divide by 100 to convert values into decimals < 1; 5 indicates # of decimal places
       Serial.print(",");
       Serial.println(beta/100.,5); //Divide by 100 to convert values into decimals < 1; 5 indicates # of decimal places
+
+      Serial1.print(alpha/100.,5); //Divide by 100 to convert values into decimals < 1; 5 indicates # of decimal places
+      Serial1.print(",");
+      Serial1.println(beta/100.,5); //Divide by 100 to convert values into decimals < 1; 5 indicates # of decimal places
+
     }
 
 }
@@ -117,38 +122,52 @@ void RunSecondBoardLoop() {
       boardbuffer.trim();
       if (boardbuffer.length() > 0) {
         //Call in values from first board
-        float alpha = boardbuffer.substring(0,5).toFloat()*100.; //Reads 5 decimal places of first value (alpha)
-        float beta = boardbuffer.substring(7).toFloat()*100.; //Skips comma (6) and reads 5 decimal places of second value (beta)
+        //float alpha = boardbuffer.substring(0,5).toFloat()*100.; //Reads 5 decimal places of first value (alpha)
+        //float beta = boardbuffer.substring(7).toFloat()*100.; //Skips comma (6) and reads 5 decimal places of second value (beta)
   
-        Serial.print("Second board alpha: ");
-        Serial.println(alpha);
-        Serial.print("Second board beta: ");
-        Serial.println(beta);
+        int commaPos = boardbuffer.indexOf(',');
 
-        //Convert angles to motor volatage outputs
-        float fb_Ctrl = sens_FB*alpha*255;
-        float rl_Ctrl = sens_RL*beta*255;
+        if (commaPos > 0) {
+          float alpha = boardbuffer.substring(0, commaPos).toFloat() * 10000.0;
+          float beta = boardbuffer.substring(commaPos + 1).toFloat() * 10000.0;
 
-        //Define motor voltage outputs for forward/backwards motion and define boundary conditions
-        if (fb_Ctrl >= 0 && fb_Ctrl <= 255) {
-            analogWrite(9, fb_Ctrl); 
-        } else if (fb_Ctrl >= -255 && fb_Ctrl < 0) {
-            analogWrite(10, -fb_Ctrl);
-        } else if (fb_Ctrl > 255) {
-            analogWrite(9, 255);
-        } else if (fb_Ctrl < -255) {
-            analogWrite(10, 255);
-        } 
+          //Serial.print("Second Board Alpha = ");
+          //Serial.println(alpha);
+
+          //Serial.print("Second Board Beta = ");
+          //Serial.println(beta);
+        
+          //Convert angles to motor volatage outputs (-250 t0 250)
+          float fb_Ctrl = 4.*alpha;
+          float rl_Ctrl = 4.*beta;
+
+          Serial.print("F/B Ctrl: ");
+          Serial.println(fb_Ctrl);
+          Serial.print("R/L Ctrl: ");
+          Serial.println(rl_Ctrl);
+
+
+          //Define motor voltage outputs for forward/backwards motion and define boundary conditions
+          if (fb_Ctrl >= 0 && fb_Ctrl <= 255) {
+              analogWrite(9, fb_Ctrl); 
+          } else if (fb_Ctrl >= -255 && fb_Ctrl < 0) {
+              analogWrite(10, -fb_Ctrl);
+          } else if (fb_Ctrl > 255) {
+             analogWrite(9, 255);
+          } else if (fb_Ctrl < -255) {
+              analogWrite(10, 255);
+          } 
   
-        // Define motor voltage outputs for right/left motion and define boundary conditions
-        if (rl_Ctrl >= 0 && rl_Ctrl <= 255) {
-            analogWrite(A0, rl_Ctrl);
-        } else if (rl_Ctrl >= -255 && rl_Ctrl < 0) {
-            analogWrite(A1, -rl_Ctrl);
-        } else if (rl_Ctrl > 255) {
-            analogWrite(A0, 255);
-        } else if (rl_Ctrl < -255) {
-            analogWrite(A1, 255);
+          // Define motor voltage outputs for right/left motion and define boundary conditions
+          if (rl_Ctrl >= 0 && rl_Ctrl <= 255) {
+              analogWrite(A0, rl_Ctrl);
+          } else if (rl_Ctrl >= -255 && rl_Ctrl < 0) {
+             analogWrite(A1, -rl_Ctrl);
+          } else if (rl_Ctrl > 255) {
+              analogWrite(A0, 255);
+          } else if (rl_Ctrl < -255) {
+             analogWrite(A1, 255);
+          }
         }
 
       }
