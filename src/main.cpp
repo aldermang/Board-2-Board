@@ -27,7 +27,7 @@ void setReports();
 Adafruit_BNO08x bno08x(BNO08X_RESET);
 sh2_SensorValue_t sensorValue;
 
-bool isMainBoard = false;
+bool isMainBoard = true;
 
 String pcbuffer = "";
 String boardbuffer = "";
@@ -49,6 +49,24 @@ void setup() {
   }
   Serial1.setPins(pinRx, pinTx);
   Serial1.begin(9600);
+
+  //Accelerometer setup
+  Serial.begin(115200);
+  while (!Serial)
+  delay(10);
+
+  Serial.println("Adafruit BNO08x test!");
+
+  if (!bno08x.begin_I2C()) {
+   Serial.println("Failed to find BNO08x chip");
+   while (1) {
+     delay(10);
+   }
+  }
+
+  Serial.println("BNO08x Found!");
+
+  setReports();
 }
 
 //"setReports" function
@@ -63,24 +81,6 @@ void setReports(void) {
 
 //Main board function
 void RunMainBoardLoop() {
-  //Accelerometer setup
-  //Serial.begin(115200);
-  //while (!Serial)
-  //delay(10);
-
-  Serial.println("Adafruit BNO08x test!");
-
-  if (!bno08x.begin_I2C()) {
-   Serial.println("Failed to find BNO08x chip");
-   while (1) {
-     delay(10);
-   }
-  }
-
-  Serial.println("BNO08x Found!");
-
-  setReports();
-
   //If the board was reset, print a message
   if (bno08x.wasReset()) {
     Serial.print("sensor was reset ");
