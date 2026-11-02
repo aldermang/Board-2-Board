@@ -4,8 +4,6 @@
 2.) Once both micro controllers have the new code uploaded, connect both of them to computer (1 via USB and 1 via port) for power
 3.) Connect external power supply to the breadboard (for the motors) and set the voltage to 5-6 [V]
 4.) With everything connected and powered on, the joystick should now control the mechanism
-
-NOTE: For the final testing, the breadboard will be zip-tied upside-down to the bottom of the mechanism housing (for easier access)
 */
 
 //////////////////////////////////////////////////////// SETUP ////////////////////////////////////////////////////////
@@ -28,8 +26,8 @@ Adafruit_BNO08x bno08x(BNO08X_RESET);
 sh2_SensorValue_t sensorValue;
 
 //Set the corresponding statement to true/false based on which board you are uploading to
-bool isMainBoard = true;
-//bool isMainBoard = false;
+//bool isMainBoard = true;
+bool isMainBoard = false;
 
 String pcbuffer = "";
 String boardbuffer = "";
@@ -53,7 +51,7 @@ void setup() {
   Serial1.begin(9600);
 
   //Accelerometer setup (comment this out if you are uploading to the secondary board)
-  
+  /*
   Serial.begin(115200);
   while (!Serial)
   delay(10);
@@ -70,7 +68,7 @@ void setup() {
   Serial.println("BNO08x Found!");
 
   setReports();
-  
+  */
 }
 
 //"setReports" function for accelerometer
