@@ -28,8 +28,8 @@ Adafruit_BNO08x bno08x(BNO08X_RESET);
 sh2_SensorValue_t sensorValue;
 
 //Set the corresponding statement to true/false based on which board you are uploading to
-//bool isMainBoard = true;
-bool isMainBoard = false;
+bool isMainBoard = true;
+//bool isMainBoard = false;
 
 String pcbuffer = "";
 String boardbuffer = "";
@@ -53,7 +53,8 @@ void setup() {
   Serial1.begin(9600);
 
   //Accelerometer setup (comment this out if you are uploading to the secondary board)
-  /*Serial.begin(115200);
+  
+  Serial.begin(115200);
   while (!Serial)
   delay(10);
 
@@ -69,10 +70,10 @@ void setup() {
   Serial.println("BNO08x Found!");
 
   setReports();
-  */
+  
 }
 
-//"setReports" function
+//"setReports" function for accelerometer
 void setReports(void) {
   Serial.println("Setting desired reports");
   if (!bno08x.enableReport(SH2_ACCELEROMETER)) {
@@ -102,9 +103,9 @@ void RunMainBoardLoop() {
       float beta = atan2(y, sqrt(x*x + z*z));
 
       //Print angle values into single line to feed into second board 
-      Serial.print(alpha/100.,5); //Divide by 100 to convert values into decimals < 1; 5 indicates # of decimal places
-      Serial.print(",");
-      Serial.println(beta/100.,5); //Divide by 100 to convert values into decimals < 1; 5 indicates # of decimal places
+      //Serial.print(alpha/100.,5); //Divide by 100 to convert values into decimals < 1; 5 indicates # of decimal places
+      //Serial.print(",");
+      //Serial.println(beta/100.,5); //Divide by 100 to convert values into decimals < 1; 5 indicates # of decimal places
 
       Serial1.print(alpha/100.,5); //Divide by 100 to convert values into decimals < 1; 5 indicates # of decimal places
       Serial1.print(",");
@@ -122,14 +123,11 @@ void RunSecondBoardLoop() {
       boardbuffer.trim();
       if (boardbuffer.length() > 0) {
         //Call in values from first board
-        //float alpha = boardbuffer.substring(0,5).toFloat()*100.; //Reads 5 decimal places of first value (alpha)
-        //float beta = boardbuffer.substring(7).toFloat()*100.; //Skips comma (6) and reads 5 decimal places of second value (beta)
-  
         int commaPos = boardbuffer.indexOf(',');
 
         if (commaPos > 0) {
-          float alpha = boardbuffer.substring(0, commaPos).toFloat() * 10000.0;
-          float beta = boardbuffer.substring(commaPos + 1).toFloat() * 10000.0;
+          float alpha = boardbuffer.substring(0, commaPos).toFloat() * 10000.0; //Reads decimal places of first value up until the comma (alpha)
+          float beta = boardbuffer.substring(commaPos + 1).toFloat() * 10000.0; //Skips comma and reads remainder of decimal values (beta)
 
           //Serial.print("Second Board Alpha = ");
           //Serial.println(alpha);
@@ -144,7 +142,6 @@ void RunSecondBoardLoop() {
           //Serial.println(fb_Ctrl);
           //Serial.print("R/L Ctrl: ");
           //Serial.println(rl_Ctrl);
-
 
           //Define motor voltage outputs for forward/backwards motion and define boundary conditions
           if (fb_Ctrl >= 0 && fb_Ctrl <= 255) {
@@ -171,15 +168,16 @@ void RunSecondBoardLoop() {
 
       }
       boardbuffer = "";
+
     } else if (c != '\r') {
       boardbuffer += c;
     }
+
   }
 }
 
 //////////////////////////////////////////////////////// MAIN CODE ////////////////////////////////////////////////////////
 void loop() {
-  // \r \n
   if (isMainBoard) {
     RunMainBoardLoop();
   } else {
